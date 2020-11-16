@@ -6,6 +6,7 @@ class Manager extends Employee {
         super()
     
     }
+    getRole ()
 }
 
 module.exports = Manager;
