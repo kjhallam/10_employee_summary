@@ -17,7 +17,7 @@ so that I have quick access to emails and GitHub profiles
 
 ---
 
-## Table of Contents
+## 📋 Table of Contents
 
   1. [DESCRIPTION](#description)
   2. [INSTALLATION](#installation)
@@ -29,7 +29,7 @@ so that I have quick access to emails and GitHub profiles
   
 ---
 
-## 📓 INSTALLATION
+## 🖥️ INSTALLATION
 
 npm i & app will run as a Node CLI to gather information about each employee
 
@@ -45,7 +45,7 @@ n/a
 
 ---
 
-## 📓 TEST
+## 🧪 TEST
 
 Tested each team member (Manager, Engineer, Intern as a class)
 
@@ -61,6 +61,6 @@ Tested each team member (Manager, Engineer, Intern as a class)
 
 ---
 
-## 💻 QUESTIONS
+## ❓ QUESTIONS
 
 If any questions concerning the use of the markdown file contact me at ✉️ [Email](kjhallam321@gmail.com).
