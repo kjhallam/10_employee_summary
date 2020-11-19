@@ -62,124 +62,98 @@ const managerQuestions = [
 
 
 function getEmployee() {
+   
     const askManager = () => {
-        return inquirer.prompt
-        (managerQuestions)
-        .then((response) => {
+        return inquirer.prompt(managerQuestions)
+        .then(response => {
             const fileName = outputPath;
-            let manager = null;
-
-        try {
-            manager = new Manager(response.mgrName, response.mgrId, response.mgrEmail, response.mgrOffice, response.mgrTeamMember)
-        }
-        catch (err) {
-            console.log(err.message);
-            askManager();
+            let manager = new Manager(response.mgrName, response.mgrId, response.mgrEmail, response.mgrOffice, response.mgrTeamMember)
+            console.log('EMPLOYEE ARRAY--> ', employeeArr);
+             employeeArr.push(manager);
+            askRole();
             return;
-        }
-        employeeArr.push(manager);
+        })
+        .catch(err => {
+            console.log(err)
+        })
+    }
 
     const askRole = () => {
         return inquirer.prompt(
-            [
+          [
             {
                 type: 'list',
                 message: "Which type of team member would you like to add?",
                 name: "addTeamMember",
                 choices: ["Engineer", "Intern", "No Additional Team Members."]
             }
-            ]      
-        )
-        .then((responseType) => {
+          ]      
+        ).then(responseType => {
             const data = responseType;
             if (responseType.addTeamMember != "Close") {
                 switch (responseType.employeeQuestions) {
                     case "Intern":
+                    console.log('INTERN SECTION')
                     inquirer.prompt(
-                    [
-                        employeeQuestions.name, employeeQuestions.id, employeeQuestions.email,
-                        [
-                            {
-                            type: 'input',
-                            message: "Where does intern attend school?",
-                            name: "school",
-                            }
-                        ]
-                    
-                    ])
-                    .then((responseInt) => {
-                        const data = responseInt;
-                        let intern = null;
-                        try { intern = new Intern(data.name, data.id, data.email, data.school);
-                            functionType(intern);
+                    [ ...employeeQuestions,  
+                        {
+                        type: 'input',
+                        message: "Where does intern attend school?",
+                        name: "school",
                         }
-                    catch (err) {
-                        console.log(err.message);
-
+                    ])
+                    .then(responseInt => {
+                        const data = responseInt;
+                        let intern = intern = new Intern(data.name, data.id, data.email, data.school);
+                        functionType(intern);
                         askRole();
-
                         return;
-                    }
-                    });
+                    })
+                    .catch(err => {
+                        console.log(err);  
+                    })
                     break;
-                case "Engineer": inquirer.prompt(
-                    [
-                        employeeQuestions.name, employeeQuestions.id,
-                        employeeQuestions.email,
+                case "Engineer": 
+                    console.log('WE ARE IN THE ENGINEER CASE')
+                    inquirer.prompt(
+                        [...employeeQuestions,
                         {
                                 type: 'input',
                                 message: "What is your GitHub username",
                                 name: "github",
                         }
-                    ])
-                        .then((responseEng) => {
-                            const data = responseEng;
-                            let engineer = null;
-                        
-                        try { 
-                            engineer = new Engineer(data.name, data.id, data.email, data.github);
-                        functionType(engineer);
-                        }
-                        catch (err) {
-                          console.log(err.message);
-                          askRole();
-                          return;
-                        }
-                        });
-                        break;
-                        default: console.log(`Incomplete Employee Role: ${responseType.role}`);
-                        throw new Err("Team Completed. Enter CTRL+C");
-                        break;
-                    }
-                } else {
-                    const renderedHTML = render(employeeArr);
-                    writeToFile(filename, renderHTML);
+                    ]).then(responseEng => {
+                        const data = responseEng;
+                        let engineer = new Engineer(data.name, data.id, data.email, data.github);
+                        employeeArr.push(engineer);
+                        console.log(employeeArr)
+                        askRole();   
+                    }).catch(err => {
+                        console.log(err.message);
+                        askRole();
+                        return;
+                        // break;
+                        // default: console.log(`Incomplete Employee Role: ${responseType.role}`);
+                        // throw new Error("Incomplete Team. Enter CTRL-C");
+                        // break;
+                    })
                 }
-            });
-    }
-        const functionType = (data) => {
-            employeeArr.push(data);
+            } else {
+                const renderedHTML = render(employeeArr);
+                writeToFile(filename, renderHTML);
+            }
             askRole();
-        }
-
-        askRole();
-
         });
+        
     }
-
-        }
+       
     askManager();
-
-
+}
     
 function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, (err) 
-    => {
+    fs.writeFile(fileName, data, (err)=> {
         if(err) throw err
         console.log("Success")
     })
 }
 getEmployee();
-
-
-    
