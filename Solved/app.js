@@ -21,7 +21,7 @@ const employeeQuestions = [
     },
     {
         type: 'input',
-        message: "What is your ID",
+        message: "What is your ID?",
         name: "id",
     },
     {
@@ -29,12 +29,7 @@ const employeeQuestions = [
         message: "What is your email?",
         name: "email",
     },
-    {
-        type: 'list',
-        message: "What is your role?",
-        name: "role",
-        choices: ["Manager", "Engineer", "Intern", "No Additional Team Members."]
-    },
+   
 ]
 
 const managerQuestions = [
@@ -45,7 +40,7 @@ const managerQuestions = [
     },
     {
         type: 'input',
-        message: "What is manager's ID",
+        message: "What is manager's ID?",
         name: "mgrId",
     },
     {
@@ -58,6 +53,7 @@ const managerQuestions = [
         message: "What is manager's office number?",
         name: "mgrOffice",
     },
+   
 ]
 
 
@@ -68,7 +64,7 @@ function getEmployee() {
         .then(response => {
             const fileName = outputPath;
             let manager = new Manager(response.mgrName, response.mgrId, response.mgrEmail, response.mgrOffice, response.mgrTeamMember)
-            console.log('EMPLOYEE ARRAY--> ', employeeArr);
+            //console.log('EMPLOYEE ARRAY--> ', employeeArr);
              employeeArr.push(manager);
             askRole();
             return;
@@ -88,34 +84,35 @@ function getEmployee() {
                 choices: ["Engineer", "Intern", "No Additional Team Members."]
             }
           ]      
-        ).then(responseType => {
-            const data = responseType;
-            if (responseType.addTeamMember != "Close") {
-                switch (responseType.employeeQuestions) {
+        ).then(response => {
+            const data = response;
+            if (data.addTeamMember !== "No Additional Team Members.") {
+                switch (data.addTeamMember) {
                     case "Intern":
-                    console.log('INTERN SECTION')
-                    inquirer.prompt(
-                    [ ...employeeQuestions,  
+                    //console.log('INTERN SECTION')
+                    const newArr = [ ...employeeQuestions,  
                         {
                         type: 'input',
                         message: "Where does intern attend school?",
                         name: "school",
                         }
-                    ])
+                    ]
+                    //console.log(newArr)
+                    return inquirer.prompt(newArr)
                     .then(responseInt => {
                         const data = responseInt;
-                        let intern = intern = new Intern(data.name, data.id, data.email, data.school);
-                        functionType(intern);
+                        console.log(data)
+                        let intern = new Intern(data.name, data.id, data.email, data.school);
+                        console.log(intern);
                         askRole();
                         return;
                     })
                     .catch(err => {
                         console.log(err);  
                     })
-                    break;
                 case "Engineer": 
-                    console.log('WE ARE IN THE ENGINEER CASE')
-                    inquirer.prompt(
+                    // console.log('WE ARE IN THE ENGINEER CASE')
+                    return inquirer.prompt(
                         [...employeeQuestions,
                         {
                                 type: 'input',
@@ -132,17 +129,14 @@ function getEmployee() {
                         console.log(err.message);
                         askRole();
                         return;
-                        // break;
-                        // default: console.log(`Incomplete Employee Role: ${responseType.role}`);
-                        // throw new Error("Incomplete Team. Enter CTRL-C");
-                        // break;
+                    
                     })
                 }
             } else {
-                const renderedHTML = render(employeeArr);
-                writeToFile(filename, renderHTML);
+                const renderHTML = render(employeeArr);
+                console.log(renderHTML);
+                writeToFile("team.html", renderHTML);
             }
-            askRole();
         });
         
     }
@@ -152,8 +146,11 @@ function getEmployee() {
     
 function writeToFile(fileName, data) {
     fs.writeFile(fileName, data, (err)=> {
-        if(err) throw err
+        if(err) {
+            console.error(err)
+        }
         console.log("Success")
     })
 }
 getEmployee();
+
