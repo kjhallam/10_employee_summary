@@ -59,6 +59,14 @@ Tested each team member (Manager, Engineer, Intern as a class)
 
 ## 🎥 PREVIEW
 
+![movie](./Assets/emp-sum.gif)
+
+---
+
+## 📷 SCREENSHOT
+
+![my team](./Assets/myteam.png)
+
 ---
 
 ## ❓ QUESTIONS

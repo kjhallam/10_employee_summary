@@ -89,26 +89,26 @@ function getEmployee() {
             if (data.addTeamMember !== "No Additional Team Members.") {
                 switch (data.addTeamMember) {
                     case "Intern":
+                        return inquirer.prompt(
                     //console.log('INTERN SECTION')
-                    const newArr = [ ...employeeQuestions,  
+                     [ ...employeeQuestions,  
                         {
                         type: 'input',
                         message: "Where does intern attend school?",
                         name: "school",
                         }
-                    ]
-                    //console.log(newArr)
-                    return inquirer.prompt(newArr)
-                    .then(responseInt => {
+                    ]).then(responseInt => {
                         const data = responseInt;
-                        console.log(data)
+                        //console.log(data)
                         let intern = new Intern(data.name, data.id, data.email, data.school);
-                        console.log(intern);
+                        employeeArr.push(intern);
+                        //console.log(intern);
                         askRole();
-                        return;
                     })
                     .catch(err => {
-                        console.log(err);  
+                        console.log(err.message);
+                         askRole();
+                         return;
                     })
                 case "Engineer": 
                     // console.log('WE ARE IN THE ENGINEER CASE')
@@ -116,14 +116,14 @@ function getEmployee() {
                         [...employeeQuestions,
                         {
                                 type: 'input',
-                                message: "What is your GitHub username",
+                                message: "What is your GitHub username?",
                                 name: "github",
                         }
                     ]).then(responseEng => {
                         const data = responseEng;
                         let engineer = new Engineer(data.name, data.id, data.email, data.github);
                         employeeArr.push(engineer);
-                        console.log(employeeArr)
+                        //console.log(employeeArr)
                         askRole();   
                     }).catch(err => {
                         console.log(err.message);
